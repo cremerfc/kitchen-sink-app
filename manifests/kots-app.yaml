@@ -1,0 +1,20 @@
+---
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: influxdb
+spec:
+  title: App Name
+  icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
+  statusInformers:
+    - deployment/influxdb
+    - sts/redis-master
+    - sts/redis-replicas
+    - sts/postgresql
+  ports:
+    - serviceName: "example-nginx"
+      servicePort: 80
+      localPort: 8888
+      applicationUrl: "http://example-nginx"
+  additionalNamespaces:
+    - splunk-operator    
