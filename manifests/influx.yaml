@@ -21,4 +21,8 @@ spec:
 
   # values are used in the customer environment, as a pre-render step
   # these values will be supplied to helm template
-  values: {}
+  values:
+    auth:
+      admin:
+        password: '{{repl ConfigOption "influxdb_password"}}'
+        token: '{{repl ConfigOption "influxdb_token"}}'

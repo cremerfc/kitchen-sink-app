@@ -112,6 +112,21 @@ spec:
           type: password
           default: 'password'
           when: repl{{ ConfigOptionEquals "enable_smtp" "1" }}
+    - name: influxdb_settings
+      title: InfluxDB Settings
+      items:
+        - name: deploy-influxdb
+          title: Deploy InfluxDB?
+          type: bool
+          default: "1"
+        - name: influxdb_password
+          hidden: true
+          type: password
+          value: "{{repl RandomString 10}}"
+        - name: influxdb_token
+          hidden: true
+          type: password
+          value: "{{repl RandomString 20}}"    
     - name: minio_settings
       title: MINIO Settings
       description: Configure minio Settings
