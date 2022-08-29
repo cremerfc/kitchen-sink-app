@@ -116,6 +116,10 @@ spec:
       title: MINIO Settings
       description: Configure minio Settings
       items:
+        - name: deploy-minio
+          title: Deploy MinIO?
+          type: bool
+          default: "1" 
         - name: embedded_minio_password
           hidden: true
           type: password
