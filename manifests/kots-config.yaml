@@ -131,5 +131,13 @@ spec:
           title: Deploy RabbitMQ?
           type: bool
           default: "1"
+        - name: rabbitmq_password
+          hidden: true
+          type: password
+          value: "{{repl RandomString 16}}"
+        - name: rabbitmq_erlang_cookie
+          hidden: true
+          type: password
+          value: "{{repl RandomString 32}}"      
    
 

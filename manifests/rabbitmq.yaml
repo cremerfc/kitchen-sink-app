@@ -21,4 +21,8 @@ spec:
 
   # values are used in the customer environment, as a pre-render step
   # these values will be supplied to helm template
-  values: {}
+  values:
+    auth:
+      password: '{{repl ConfigOption "rabbitmq_password"}}'
+      erlangCookie: '{{repl ConfigOption "rabbitmq_erlang_cookie"}}'
+    
