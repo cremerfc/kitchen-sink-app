@@ -15,7 +15,7 @@ spec:
           items:
             - name: embedded_postgres
               title: Embedded Postgres
-            - name: external_postgres_inline
+            - name: external_postgres
               title: External Postgres
         - name: embedded_postgres_password
           hidden: true
@@ -23,27 +23,27 @@ spec:
           value: "{{repl RandomString 32}}"
         - name: external_postgres_host
           title: Postgres Host
-          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres_inline"}}'
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
           default: postgres
         - name: external_postgres_port
           title: Postgres Port
-          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres_inline"}}'
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
           default: "5432"
         - name: external_postgres_user
           title: Postgres Username
-          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres_inline"}}'
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
           required: true
         - name: external_postgres_password
           title: Postgres Password
-          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres_inline"}}'
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: password
           required: true
         - name: external_postgres_db
           title: Postgres Database
-          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres_inline"}}'
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
           default: sentry
 
@@ -54,7 +54,7 @@ spec:
           items:
             - name: embedded_redis
               title: Embedded Redis
-            - name: external_redis_inline
+            - name: external_redis
               title: External Redis
         - name: embedded_redis_password
           hidden: true
@@ -66,21 +66,21 @@ spec:
           value: "{{repl RandomString 32}}"
         - name: external_redis_host
           title: Redis Host
-          when: '{{repl ConfigOptionEquals "redis_type" "external_redis_inline"}}'
+          when: '{{repl ConfigOptionEquals "redis_type" "external_redis"}}'
           type: text
           default: redis
         - name: external_redis_port
           title: Redis Port
-          when: '{{repl ConfigOptionEquals "redis_type" "external_redis_inline"}}'
+          when: '{{repl ConfigOptionEquals "redis_type" "external_redis"}}'
           type: text
           default: "6379"
         - name: external_redis_user
           title: Redis Username
-          when: '{{repl ConfigOptionEquals "redis_type" "external_redis_inline"}}'
+          when: '{{repl ConfigOptionEquals "redis_type" "external_redis"}}'
           type: text
         - name: external_redis_password
           title: Redis Password
-          when: '{{repl ConfigOptionEquals "redis_type" "external_redis_inline"}}'
+          when: '{{repl ConfigOptionEquals "redis_type" "external_redis"}}'
           type: password
           required: true
     - name: smtp_settings

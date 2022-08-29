@@ -3,6 +3,7 @@ kind: HelmChart
 metadata:
   name: rabbitmq
 spec:
+  exclude: '{{repl ConfigOptionEquals "deploy-rabbit" "0"}}'
   # chart identifies a matching chart from a .tgz
   chart:
     name: rabbitmq

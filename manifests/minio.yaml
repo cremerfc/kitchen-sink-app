@@ -3,6 +3,7 @@ kind: HelmChart
 metadata:
   name: minio
 spec:
+  exclude: 'repl{ ConfigOptionEquals "deploy-minio" "0"}'
   # chart identifies a matching chart from a .tgz
   chart:
     name: minio
