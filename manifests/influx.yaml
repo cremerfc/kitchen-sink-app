@@ -3,7 +3,7 @@ kind: HelmChart
 metadata:
   name: influxdb
 spec:
-  exclude: 'repl{ ConfigOptionEquals "deploy-influxdb" "0"}'
+  exclude: 'repl{{ ConfigOptionEquals "deploy-influxdb" "0"}}'
   # chart identifies a matching chart from a .tgz
   chart:
     name: influxdb

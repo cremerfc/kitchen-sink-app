@@ -4,64 +4,41 @@ kind: Preflight
 metadata:
   name: example-preflight-checks
 spec:
+  collectors:
+    - postgres:
+        exclude: 'repl{{ ConfigOptionEquals "postgres_type" "embedded_postgres" }}'
+        collectorName: postrges-check
+#        uri: 'postgresql://user:password@hostname:5432/dbname?sslmode=require'
+        uri: 'postgresql://repl{{ ConfigOption "external_postgres_user"}}:repl{{ ConfigOption "external_postgres_password"}}@repl{{ ConfigOption "external_postgres_host"}}:repl{{ ConfigOption "external_postgres_port"}}/repl{{ ConfigOption "external_postgres_db"}}?sslmode=require'
+    - run:
+        exclude: repl{{ ConfigOptionEquals "enable_smtp" "0" }}
+        collectorName: "run-ping"
+        image: busybox:1
+        name: ping.txt
+        namespace: default
+        command: ["ping"]
+        args: ["-w", "10", "-c", "10", "-i", "0.3", '{{repl ConfigOption "smtp_host"}}']
+        imagePullPolicy: IfNotPresent    
   analyzers:
-    - clusterVersion:
+    - postgres:
+        exclude: 'repl{{ ConfigOptionEquals "postgres_type" "embedded_postgres" }}'
+        strict: 'repl{{  eq (LicenseFieldValue "licenseType") "prod" }}'
+        checkName: Postgress Connection Test
+        collectorName: postrges-check
         outcomes:
           - fail:
-              when: "< 1.13.0"
-              message: The application requires at Kubernetes 1.13.0 or later, and recommends 1.15.0.
-              uri: https://www.kubernetes.io
-          - warn:
-              when: "< 1.15.0"
-              message: Your cluster meets the minimum version of Kubernetes, but we recommend you update to 1.15.0 or later.
-              uri: https://kubernetes.io
+              when: connected == false
+              message: Cannot connect to the Postgres server, please check [their docs](https://www.postgresql.org/docs/) for more help.
           - pass:
-              message: Your cluster meets the recommended and required versions of Kubernetes.
-    - containerRuntime:
+              message: The Postgres server is ready
+    - textAnalyze:
+        exclude: repl{{ ConfigOptionEquals "enable_smtp" "0" }}
+        checkName: "run-ping"
+        fileName: ping.txt/run-ping.log
+        regexGroups: '(?P<Transmitted>\d+) packets? transmitted, (?P<Received>\d+) packets? received, (?P<Loss>\d+)(\.\d+)?% packet loss'
         outcomes:
           - pass:
-              when: "== containerd"
-              message: Docker container runtime was found.
+              when: "Loss < 5"
+              message: Able to connecto to SMTP host
           - fail:
-              message: Did not find containerd container runtime.
-    - distribution:
-        checkName: Check Kubernetes environment.
-        outcomes:
-          - fail:
-              when: "== docker-desktop"
-              message: The application does not support Docker Desktop Clusters
-          - fail:
-              when: "== microk8s"
-              message: The application does not support Microk8s Clusters
-          - fail:
-              when: "== minikube"
-              message: The application does not support Minikube Clusters
-          - pass:
-              when: "== eks"
-              message: EKS is a supported distribution
-          - pass:
-              when: "== gke"
-              message: GKE is a supported distribution
-          - pass:
-              when: "== aks"
-              message: AKS is a supported distribution
-          # Will be supported in the future
-          - pass:
-              when: "== kurl"
-              message: KURL is a supported distribution
-          - pass:
-              when: "== digitalocean"
-              message: DigitalOcean is a supported distribution
-          - warn:
-              message: Unable to determine the distribution of Kubernetes
-    - nodeResources:
-        checkName: Total CPU Cores in the cluster is 2 or greater
-        outcomes:
-          - fail:
-              when: "sum(cpuCapacity) < 2"
-              message: The cluster must contain at least 2 cores
-          - fail:
-              when: "sum(cpuCapacity) < 4"
-              message: The cluster must contain at least 4 cores
-          - pass:
-              message: There are at least 2 cores in the cluster
+              message: Unable to establish connectin with SMTP host

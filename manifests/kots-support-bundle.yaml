@@ -8,9 +8,46 @@ spec:
     - clusterInfo: {}
     - clusterResources: {}
     - logs:
+        name: influxdb-logs
+        exclude: 'repl{{ ConfigOptionEquals "deploy-influxdb" "0"}}'
         selector:
-          - app=example
-          - component=nginx
+          - app.kubernetes.io/name=influxdb
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 720h
+          maxLines: 10000
+    - logs:
+        name: minio-logs
+        exclude: 'repl{{ ConfigOptionEquals "deploy-minio" "0" }}'
+        selector:
+          - app.kubernetes.io/name=minio
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 720h
+          maxLines: 10000
+    - logs:
+        name: postgres-logs
+        exclude: 'repl{{ ConfigOptionEquals `postgres_type` `external_postgres` }}'
+        selector:
+          - app.kubernetes.io/name=postgresql
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 720h
+          maxLines: 10000
+    - logs:
+        name: redis-logs
+        exclude: 'repl{{ ConfigOptionEquals `redis_type` `external_redis` }}'
+        selector:
+          - app.kubernetes.io/name=redis
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 720h
+          maxLines: 10000
+    - logs:
+        name: rabbitmq-logs
+        exclude: 'repl{{ ConfigOptionEquals "deploy-rabbit" "0"}}'
+        selector:
+          - app.kubernetes.io/name=rabbitmq
         namespace: '{{repl Namespace }}'
         limits:
           maxAge: 720h
